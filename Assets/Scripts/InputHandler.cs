@@ -22,6 +22,9 @@ public class InputHandler : MonoBehaviour {
 
     private List<GameObject> footStepCache = new List<GameObject>();
 
+    [SerializeField] public Animator footstepMarker;
+    [SerializeField] public GameObject banner;
+
 	// Use this for initialization
 	void Start () 
     {
@@ -31,8 +34,12 @@ public class InputHandler : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        //print("Mouse Pos: " + Input.mousePosition);
-        //print("Convert to World Pos: " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        print("Mouse Pos: " + Input.mousePosition);
+        print("Convert to World Pos: " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
+
+        footstepMarker.transform.position = moverReference.transform.position;
+        banner.transform.position = moverReference.transform.position;
+        
         if (startMove)
             GenerateFootstep();
     }
@@ -42,6 +49,7 @@ public class InputHandler : MonoBehaviour {
         if (Mathf.Abs(moverReference.position.x - newPos.x) <= .1f
          && Mathf.Abs(moverReference.position.y - newPos.y) <= .1f)
         {
+            footstepMarker.SetTrigger("Appear");
             print("Arrival: " + System.DateTime.Now.ToString());
             lastPos = newPos;
             startMove = false;
@@ -61,7 +69,6 @@ public class InputHandler : MonoBehaviour {
                     GameObject temp = Instantiate(footStep_L,
                         moverReference.transform.position,
                         newRot);
-                    print(Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg);
                     footStepCache.Add(temp);
                     leftOrRight = 1;
                 }
@@ -81,8 +88,9 @@ public class InputHandler : MonoBehaviour {
     /// <summary>
     /// Needs enter newPos parameter.
     /// </summary>
-    //public void SetNewPosition(Vector3 newPos)
+    //public void SetNewPosition(float x, float y)
     //{
+    //    Vector3 newPos = new Vector3(x, y, 0);
     //    foreach (GameObject obj in footStepCache)
     //        Destroy(obj);
     //    footStepCache.Clear();
@@ -109,11 +117,15 @@ public class InputHandler : MonoBehaviour {
         foreach (GameObject obj in footStepCache)
             Destroy(obj);
         footStepCache.Clear();
+
+        footstepMarker.SetTrigger("Disappear");
+
         if (useViewportPos)
             newPos = Camera.main.ScreenToWorldPoint(newPos);            
         newPos.z = 0;
-        direction = (newPos - lastPos).normalized;
-        print(direction);
+
+        direction = (newPos - lastPos).normalized;    
+        
         timer = generateInteval;
         startMove = true;
     }
