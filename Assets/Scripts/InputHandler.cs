@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+//using UnityEditor;
 
 public class InputHandler : MonoBehaviour {
 
@@ -131,18 +131,18 @@ public class InputHandler : MonoBehaviour {
     }
 
     // Deleted the following in build ver.
-    [CustomEditor(typeof(InputHandler))]
-    public class InputHandlerEditor : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            DrawDefaultInspector();
+    //[CustomEditor(typeof(InputHandler))]
+    //public class InputHandlerEditor : Editor
+    //{
+    //    public override void OnInspectorGUI()
+    //    {
+    //        DrawDefaultInspector();
 
-            InputHandler ih = (InputHandler)target;
-            if (GUILayout.Button("Set Position"))
-            {
-                ih.SetNewPosition();
-            }
-        }
-    }
+    //        InputHandler ih = (InputHandler)target;
+    //        if (GUILayout.Button("Set Position"))
+    //        {
+    //            ih.SetNewPosition();
+    //        }
+    //    }
+    //}
 }
