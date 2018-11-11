@@ -112,7 +112,7 @@ public class InputHandler : MonoBehaviour {
     /// <summary>
     /// Don't need enter newPos parameter.
     /// </summary>
-    public void SetNewPosition()
+    public void SetNewPosition(float[] pos)
     {
         foreach (GameObject obj in footStepCache)
             Destroy(obj);
@@ -121,7 +121,7 @@ public class InputHandler : MonoBehaviour {
         footstepMarker.SetTrigger("Disappear");
 
         if (useViewportPos)
-            newPos = Camera.main.ScreenToWorldPoint(newPos);            
+            newPos = Camera.main.ScreenToWorldPoint(new Vector3(pos[0], pos[1], 0));            
         newPos.z = 0;
 
         direction = (newPos - lastPos).normalized;    
