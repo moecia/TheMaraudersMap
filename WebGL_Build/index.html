@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en-us">
   <head>
     <meta charset="utf-8">
@@ -10,16 +10,31 @@
     <script src="Build/UnityLoader.js"></script>
     <script>
       var gameInstance = UnityLoader.instantiate("gameContainer", "Build/WebGL_Build.json", {onProgress: UnityProgress});
+      var x = 500;
+      var y = 20;
+      var xs = x.toString();
+      var ys = y.toString();
+      var data = xs + ',' + ys;
+
+      function test() {
+          gameInstance.SendMessage("InputHandler", "SetNewPosition", data);
+      }
+
+      function call() {
+          gameInstance.SendMessage("InputHandler", "SetNewPosition", data);
+      }
     </script>
   </head>
   <body>
-    <div class="webgl-content">
-      <div id="gameContainer" style="width: 960px; height: 600px"></div>
-      <div class="footer">
-        <div class="webgl-logo"></div>
-        <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
-        <div class="title">The Marauder‘s Map</div>
+      <div class="webgl-content">
+          <div id="gameContainer" style="width: 960px; height: 600px"></div>
+          <div class="tt" onclick="test()">click </div>
+          <div class="tt" onclick="call()">change </div>
+          <div class="footer">
+              <div class="webgl-logo"></div>
+              <div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
+              <div class="title">The Marauder‘s Map</div>
+          </div>
       </div>
-    </div>
   </body>
 </html>

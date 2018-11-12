@@ -34,8 +34,8 @@ public class InputHandler : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        print("Mouse Pos: " + Input.mousePosition);
-        print("Convert to World Pos: " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
+        // print("Mouse Pos: " + Input.mousePosition);
+        // print("Convert to World Pos: " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
         footstepMarker.transform.position = moverReference.transform.position;
         banner.transform.position = moverReference.transform.position;
@@ -112,8 +112,28 @@ public class InputHandler : MonoBehaviour {
     /// <summary>
     /// Don't need enter newPos parameter.
     /// </summary>
-    public void SetNewPosition(float[] pos)
+    public void SetNewPosition(string pos)
     {
+        string x = "";
+        string y = "";
+        int j = 0;
+
+        for (int i = 0; i < pos.Length; i++)
+        {
+            if (pos[i] != ',')
+                x += pos[i];
+            else
+            {
+                j = i + 1;
+                break;
+            }
+        }
+        while (j < pos.Length)
+            y += pos[j++];
+
+        int posX = int.Parse(x);
+        int posY = int.Parse(y);
+
         foreach (GameObject obj in footStepCache)
             Destroy(obj);
         footStepCache.Clear();
@@ -121,7 +141,7 @@ public class InputHandler : MonoBehaviour {
         footstepMarker.SetTrigger("Disappear");
 
         if (useViewportPos)
-            newPos = Camera.main.ScreenToWorldPoint(new Vector3(pos[0], pos[1], 0));            
+            newPos = Camera.main.ScreenToWorldPoint(new Vector3(posX, posY));            
         newPos.z = 0;
 
         direction = (newPos - lastPos).normalized;    
