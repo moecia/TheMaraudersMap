@@ -22,7 +22,7 @@ public class InputHandler : MonoBehaviour {
 
     private List<GameObject> footStepCache = new List<GameObject>();
 
-    [SerializeField] public Animator footstepMarker;
+    //[SerializeField] public Animator footstepMarker;
     [SerializeField] public GameObject banner;
 
 	// Use this for initialization
@@ -37,7 +37,7 @@ public class InputHandler : MonoBehaviour {
         // print("Mouse Pos: " + Input.mousePosition);
         // print("Convert to World Pos: " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
-        footstepMarker.transform.position = moverReference.transform.position;
+        // footstepMarker.transform.position = moverReference.transform.position;
         banner.transform.position = moverReference.transform.position;
         
         if (startMove)
@@ -49,7 +49,7 @@ public class InputHandler : MonoBehaviour {
         if (Mathf.Abs(moverReference.position.x - newPos.x) <= .1f
          && Mathf.Abs(moverReference.position.y - newPos.y) <= .1f)
         {
-            footstepMarker.SetTrigger("Appear");
+            // footstepMarker.SetTrigger("Appear");
             print("Arrival: " + System.DateTime.Now.ToString());
             lastPos = newPos;
             startMove = false;
@@ -138,7 +138,7 @@ public class InputHandler : MonoBehaviour {
             Destroy(obj);
         footStepCache.Clear();
 
-        footstepMarker.SetTrigger("Disappear");
+        //footstepMarker.SetTrigger("Disappear");
 
         if (useViewportPos)
             newPos = Camera.main.ScreenToWorldPoint(new Vector3(posX, posY));            
