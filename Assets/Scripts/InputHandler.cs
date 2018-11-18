@@ -7,7 +7,7 @@ public class InputHandler : MonoBehaviour {
 
     [SerializeField] private bool useViewportPos = true;
     [SerializeField] private Vector3 newPos;
-    private Vector3 lastPos = new Vector3(0, 0);
+    private Vector3 lastPos;
     private Vector3 direction;
 
     private bool startMove = false;
@@ -18,17 +18,18 @@ public class InputHandler : MonoBehaviour {
     [SerializeField] private GameObject footStep_R;
     [SerializeField] private float generateInteval = 5.0f;
     private float timer;
-    private int leftOrRight = 1;    // 0: L, 1: R.
+    private int leftOrRight = 0;    // 0: L, 1: R.
 
     private List<GameObject> footStepCache = new List<GameObject>();
 
-    //[SerializeField] public Animator footstepMarker;
-    [SerializeField] public GameObject banner;
+    [SerializeField] public Animator footstepMarker;
 
-	// Use this for initialization
-	void Start () 
+    [SerializeField] private Vector3 testPos;
+
+    // Use this for initialization
+    void Start () 
     {
-        moverReference.position = lastPos;
+        lastPos = moverReference.position;
     }
 	
 	// Update is called once per frame
@@ -37,11 +38,14 @@ public class InputHandler : MonoBehaviour {
         // print("Mouse Pos: " + Input.mousePosition);
         // print("Convert to World Pos: " + Camera.main.ScreenToWorldPoint(Input.mousePosition));
 
-        // footstepMarker.transform.position = moverReference.transform.position;
-        banner.transform.position = moverReference.transform.position;
-        
         if (startMove)
             GenerateFootstep();
+    }
+
+    private IEnumerator DelayStart()
+    {
+        yield return new WaitForSeconds(1.0f);
+        startMove = true;
     }
 
     private void GenerateFootstep()
@@ -49,7 +53,7 @@ public class InputHandler : MonoBehaviour {
         if (Mathf.Abs(moverReference.position.x - newPos.x) <= .1f
          && Mathf.Abs(moverReference.position.y - newPos.y) <= .1f)
         {
-            // footstepMarker.SetTrigger("Appear");
+            footstepMarker.SetTrigger("Appear");
             print("Arrival: " + System.DateTime.Now.ToString());
             lastPos = newPos;
             startMove = false;
@@ -64,6 +68,9 @@ public class InputHandler : MonoBehaviour {
                 var dir = newPos - lastPos;
                 float angle = -Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg;
                 Quaternion newRot = Quaternion.AngleAxis(angle, Vector3.forward);
+
+                footstepMarker.transform.rotation = newRot;
+
                 if (leftOrRight == 0)
                 {
                     GameObject temp = Instantiate(footStep_L,
@@ -85,39 +92,11 @@ public class InputHandler : MonoBehaviour {
         }
     }
 
-    /// <summary>
-    /// Needs enter newPos parameter.
-    /// </summary>
-    //public void SetNewPosition(float x, float y)
-    //{
-    //    Vector3 newPos = new Vector3(x, y, 0);
-    //    foreach (GameObject obj in footStepCache)
-    //        Destroy(obj);
-    //    footStepCache.Clear();
-    //    if (useViewportPos)
-    //    {
-    //        this.newPos = Camera.main.ScreenToWorldPoint(newPos);
-    //        this.newPos.z = 0;
-    //    }
-    //    else
-    //    {
-    //        this.newPos = newPos;
-    //        this.newPos.z = 0;
-    //    }
-    //    direction = (newPos - lastPos).normalized;
-    //    timer = generateInteval;
-    //    startMove = true;
-    //}
-
-    /// <summary>
-    /// Don't need enter newPos parameter.
-    /// </summary>
     public void SetNewPosition(string pos)
     {
         string x = "";
         string y = "";
         int j = 0;
-
         for (int i = 0; i < pos.Length; i++)
         {
             if (pos[i] != ',')
@@ -130,25 +109,34 @@ public class InputHandler : MonoBehaviour {
         }
         while (j < pos.Length)
             y += pos[j++];
-
         int posX = int.Parse(x);
         int posY = int.Parse(y);
 
-        foreach (GameObject obj in footStepCache)
-            Destroy(obj);
-        footStepCache.Clear();
+        if (footStepCache.Count == 0 || footStepCache[footStepCache.Count - 1].name == "Footstep_R(Clone)")
+            leftOrRight = 0;
+        else if (footStepCache[footStepCache.Count - 1].name == "Footstep_L(Clone)")
+            leftOrRight = 1;
 
-        //footstepMarker.SetTrigger("Disappear");
+        if (footStepCache.Count > 20)
+        {
+            foreach (GameObject obj in footStepCache)
+                Destroy(obj);
+            footStepCache.Clear();
+        }
 
         if (useViewportPos)
             newPos = Camera.main.ScreenToWorldPoint(new Vector3(posX, posY));            
         newPos.z = 0;
-
         direction = (newPos - lastPos).normalized;    
         
         timer = generateInteval;
-        startMove = true;
+
+        if (!startMove)
+            footstepMarker.SetTrigger("Disappear");
+
+        StartCoroutine(DelayStart());
     }
+
 
     // Deleted the following in build ver.
     //[CustomEditor(typeof(InputHandler))]
@@ -161,7 +149,7 @@ public class InputHandler : MonoBehaviour {
     //        InputHandler ih = (InputHandler)target;
     //        if (GUILayout.Button("Set Position"))
     //        {
-    //            ih.SetNewPosition();
+    //            ih.SetNewPosition(ih.testPos.x.ToString() + "," + ih.testPos.y.ToString());
     //        }
     //    }
     //}
