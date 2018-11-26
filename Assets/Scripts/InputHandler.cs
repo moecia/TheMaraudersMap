@@ -13,7 +13,7 @@ public class InputHandler : MonoBehaviour {
     private bool startMove = false;
     [SerializeField] private float moveSpeed = 1.0f;
     [SerializeField] private Transform[] moverReference = new Transform[2];
-    [SerializeField] private int currentPlayer = 0;
+    [SerializeField] public int currentPlayer = 0;
 
     [SerializeField] private GameObject footStep_L;
     [SerializeField] private GameObject footStep_R;
@@ -30,7 +30,6 @@ public class InputHandler : MonoBehaviour {
     // Use this for initialization
     void Start () 
     {
-        ActivatePlayer(0);
     }
 	
 	// Update is called once per frame
@@ -40,10 +39,12 @@ public class InputHandler : MonoBehaviour {
             GenerateFootstep();
     }
 
-    private IEnumerator DelayStart()
+    public void SetInitialPos(string s)
     {
-        yield return new WaitForSeconds(1.0f);
-        startMove = true;
+        int posX, posY;
+        DecodePositionString(s, out posX, out posY);
+
+        moverReference[currentPlayer].position = new Vector3(posX, posY, 0);
     }
 
     public void ActivatePlayer(int index)
@@ -64,23 +65,8 @@ public class InputHandler : MonoBehaviour {
 
     public void SetNewPosition(string pos)
     {
-        string x = "";
-        string y = "";
-        int j = 0;
-        for (int i = 0; i < pos.Length; i++)
-        {
-            if (pos[i] != ',')
-                x += pos[i];
-            else
-            {
-                j = i + 1;
-                break;
-            }
-        }
-        while (j < pos.Length)
-            y += pos[j++];
-        int posX = int.Parse(x);
-        int posY = int.Parse(y);
+        int posX, posY;
+        DecodePositionString(pos, out posX, out posY);
 
         if (footStepCache.Count == 0 || footStepCache[footStepCache.Count - 1].name == "Footstep_R(Clone)")
             leftOrRight = 0;
@@ -96,16 +82,43 @@ public class InputHandler : MonoBehaviour {
 
         lastPos = moverReference[currentPlayer].position;
         if (useViewportPos)
-            newPos = Camera.main.ScreenToWorldPoint(new Vector3(posX, posY));            
+            newPos = Camera.main.ScreenToWorldPoint(new Vector3(posX, posY));
         newPos.z = 0;
-        direction = (newPos - lastPos).normalized;    
-        
+        direction = (newPos - lastPos).normalized;
+
         timer = generateInteval;
 
         if (!startMove)
             footstepMarker[currentPlayer].SetTrigger("Disappear");
 
         StartCoroutine(DelayStart());
+    }
+
+    private static void DecodePositionString(string pos, out int posX, out int posY)
+    {
+        string x = "";
+        string y = "";
+        int j = 0;
+        for (int i = 0; i < pos.Length; i++)
+        {
+            if (pos[i] != ',')
+                x += pos[i];
+            else
+            {
+                j = i + 1;
+                break;
+            }
+        }
+        while (j < pos.Length)
+            y += pos[j++];
+        posX = int.Parse(x);
+        posY = int.Parse(y);
+    }
+
+    private IEnumerator DelayStart()
+    {
+        yield return new WaitForSeconds(1.0f);
+        startMove = true;
     }
 
     private void GenerateFootstep()
