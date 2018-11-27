@@ -863,49 +863,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &690308105
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 690308106}
-  - component: {fileID: 690308107}
-  m_Layer: 0
-  m_Name: InputManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &690308106
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 690308105}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1449062866}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &690308107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 690308105}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de8f8d87797d76a4ab52c94fece58690, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerList:
-  - {fileID: 658761509}
-  - {fileID: 558475416}
 --- !u!1 &800445316
 GameObject:
   m_ObjectHideFlags: 0
@@ -1589,7 +1546,7 @@ GameObject:
   - component: {fileID: 1441555826}
   - component: {fileID: 1441555827}
   m_Layer: 0
-  m_Name: InputHandler_0
+  m_Name: InputHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1606,7 +1563,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1449062866}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1441555827
 MonoBehaviour:
@@ -1622,11 +1579,16 @@ MonoBehaviour:
   useViewportPos: 1
   newPos: {x: 500, y: 200, z: 0}
   moveSpeed: 0.7
-  moverReference: {fileID: 658761510}
+  moverReference:
+  - {fileID: 658761510}
+  - {fileID: 558475417}
+  currentPlayer: 0
   footStep_L: {fileID: 1163119690232758, guid: e67c3a9a2a1a2f545a036baaed4b1816, type: 2}
   footStep_R: {fileID: 1573522318550422, guid: c5c3427492a805e419317266babf806d, type: 2}
   generateInteval: 1
-  footstepMarker: {fileID: 997543385}
+  footstepMarker:
+  - {fileID: 997543385}
+  - {fileID: 467910645}
   testPos: {x: 0, y: 0, z: 0}
 --- !u!1 &1449062865
 GameObject:
@@ -1654,9 +1616,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 21833367}
-  - {fileID: 690308106}
   - {fileID: 1441555826}
-  - {fileID: 1578827508}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1833,55 +1793,6 @@ Transform:
   m_Father: {fileID: 558475417}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1578827507
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1578827508}
-  - component: {fileID: 1578827509}
-  m_Layer: 0
-  m_Name: InputHandler_1
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1578827508
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1578827507}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1449062866}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1578827509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1578827507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b43df77a6b107e34ba6b9c1d845c925d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useViewportPos: 1
-  newPos: {x: -0.8186043, y: 5.403101, z: 0}
-  moveSpeed: 0.7
-  moverReference: {fileID: 558475417}
-  footStep_L: {fileID: 1163119690232758, guid: e67c3a9a2a1a2f545a036baaed4b1816, type: 2}
-  footStep_R: {fileID: 1573522318550422, guid: c5c3427492a805e419317266babf806d, type: 2}
-  generateInteval: 1
-  footstepMarker: {fileID: 467910645}
-  testPos: {x: 0, y: 0, z: 0}
 --- !u!1 &1601603382
 GameObject:
   m_ObjectHideFlags: 0

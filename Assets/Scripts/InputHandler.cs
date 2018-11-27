@@ -44,7 +44,10 @@ public class InputHandler : MonoBehaviour {
         int posX, posY;
         DecodePositionString(s, out posX, out posY);
 
-        moverReference[currentPlayer].position = new Vector3(posX, posY, 0);
+        if (useViewportPos)
+            newPos = Camera.main.ScreenToWorldPoint(new Vector3(posX, posY));
+        newPos.z = 0;
+        moverReference[currentPlayer].position = newPos;
     }
 
     public void ActivatePlayer(int index)
